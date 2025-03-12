@@ -356,7 +356,7 @@ const MultiStepForm = () => {
       </FormProvider>
 
       {/* Success Modal */}
-      {!showSuccessModal && (
+      {showSuccessModal && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/70">
           <div className="bg-white rounded-lg shadow-xl p-6 sm:p-8 max-w-md w-full mx-4 sm:mx-0 animate-fadeIn">
             <div className="flex justify-between items-start mb-4">
