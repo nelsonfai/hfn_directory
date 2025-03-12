@@ -1,0 +1,160 @@
+import React from 'react';
+import { Controller, useFormContext } from 'react-hook-form';
+import CustomRadio from '../ui/CustomRadio'; // Ensure the path is correct
+
+const Regulatory = () => {
+  const { register, control, watch, formState: { errors } } = useFormContext();
+
+  const isLicensed = watch('isLicensed');
+  const hasInternationalCertifications = watch('hasInternationalCertifications');
+
+  return (
+    <div className="space-y-6 animate-fadeIn">
+      <div className="mb-8">
+        <label className="block text-sm font-medium text-gray-700 mb-3">
+          Are you licensed/registered with relevant regulatory bodies? <span className="text-red-500">*</span>
+        </label>
+        <div className="flex space-x-8 mt-2">
+          <CustomRadio
+            id="isLicensedYes"
+            name="isLicensed"
+            value="true"
+            register={register}
+            watch={watch}
+            errors={errors}
+            label="Yes"
+          />
+          <CustomRadio
+            id="isLicensedNo"
+            name="isLicensed"
+            value="false"
+            register={register}
+            watch={watch}
+            errors={errors}
+            label="No"
+          />
+        </div>
+        {errors.isLicensed && (
+          <p className="mt-1 text-sm text-red-600">{errors.isLicensed.message}</p>
+        )}
+      </div>
+
+      {isLicensed === "true" && (
+        <div className="border-l-4 border-[#fb8c01] pl-4 py-2 mb-8 transition-all duration-300 ease-in">
+          <div className="space-y-4">
+            <div>
+              <label htmlFor="regulatoryAuthority" className="block text-sm font-medium text-gray-700 mb-1">
+                Please specify regulatory authority (e.g., NAFDAC, NHIS, MDCN, PCN, etc.) <span className="text-red-500">*</span>
+              </label>
+              <Controller
+                name="regulatoryAuthority"
+                control={control}
+                rules={{ required: isLicensed === "true" ? "Regulatory authority is required" : false }}
+                render={({ field }) => (
+                  <>
+                    <input
+                      type="text"
+                      id="regulatoryAuthority"
+                      {...field}
+                      className={`w-full px-4 py-2 border ${
+                        errors.regulatoryAuthority ? 'border-red-500' : 'border-gray-300'
+                      } rounded-md focus:outline-none focus:ring-2 focus:ring-[#fb8c01] focus:border-[#fb8c01] transition-colors`}
+                    />
+                    {errors.regulatoryAuthority && (
+                      <p className="mt-1 text-sm text-red-600">{errors.regulatoryAuthority.message}</p>
+                    )}
+                  </>
+                )}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="registrationNumber" className="block text-sm font-medium text-gray-700 mb-1">
+                Registration Number <span className="text-red-500">*</span>
+              </label>
+              <Controller
+                name="registrationNumber"
+                control={control}
+                rules={{ required: isLicensed === "true" ? "Registration number is required" : false }}
+                render={({ field }) => (
+                  <>
+                    <input
+                      type="text"
+                      id="registrationNumber"
+                      {...field}
+                      className={`w-full px-4 py-2 border ${
+                        errors.registrationNumber ? 'border-red-500' : 'border-gray-300'
+                      } rounded-md focus:outline-none focus:ring-2 focus:ring-[#fb8c01] focus:border-[#fb8c01] transition-colors`}
+                    />
+                    {errors.registrationNumber && (
+                      <p className="mt-1 text-sm text-red-600">{errors.registrationNumber.message}</p>
+                    )}
+                  </>
+                )}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="mb-8">
+        <label className="block text-sm font-medium text-gray-700 mb-3">
+          Do you hold any international certifications or accreditations (e.g., ISO, WHO, JCI)? <span className="text-red-500">*</span>
+        </label>
+        <div className="flex space-x-8 mt-2">
+          <CustomRadio
+            id="hasInternationalCertificationsYes"
+            name="hasInternationalCertifications"
+            value="true"
+            register={register}
+            watch={watch}
+            errors={errors}
+            label="Yes"
+          />
+          <CustomRadio
+            id="hasInternationalCertificationsNo"
+            name="hasInternationalCertifications"
+            value="false"
+            register={register}
+            watch={watch}
+            errors={errors}
+            label="No"
+          />
+        </div>
+        {errors.hasInternationalCertifications && (
+          <p className="mt-1 text-sm text-red-600">{errors.hasInternationalCertifications.message}</p>
+        )}
+      </div>
+
+      {hasInternationalCertifications === "true" && (
+        <div className="border-l-4 border-[#fb8c01] pl-4 py-2 transition-all duration-300 ease-in">
+          <label htmlFor="certifications" className="block text-sm font-medium text-gray-700 mb-1">
+            Please specify the certifications <span className="text-red-500">*</span>
+          </label>
+          <Controller
+            name="certifications"
+            control={control}
+            rules={{ required: hasInternationalCertifications === "true" ? "Please specify the certifications" : false }}
+            render={({ field }) => (
+              <>
+                <textarea
+                  id="certifications"
+                  {...field}
+                  rows="3"
+                  className={`w-full px-4 py-2 border ${
+                    errors.certifications ? 'border-red-500' : 'border-gray-300'
+                  } rounded-md focus:outline-none focus:ring-2 focus:ring-[#fb8c01] focus:border-[#fb8c01] transition-colors`}
+                />
+                {errors.certifications && (
+                  <p className="mt-1 text-sm text-red-600">{errors.certifications.message}</p>
+                )}
+              </>
+            )}
+          />
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default Regulatory;
