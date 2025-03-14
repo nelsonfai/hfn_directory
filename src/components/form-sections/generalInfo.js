@@ -8,15 +8,19 @@ const GeneralInfo = () => {
   
   const organizationTypes = [
     { value: 'healthcare-provider', label: 'Healthcare Provider (Hospital, Clinic, Diagnostic Center)' },
-    { value: 'pharmaceutical', label: 'Pharmaceutical Company' },
+    { value: 'pharmaceutical', label: 'Pharmaceutical Company (Manufacturer, Distributor, Importer)' },
     { value: 'insurance', label: 'Health Insurance Provider (HMO)' },
-    { value: 'tech-firm', label: 'Health Technology Firm' },
+    { value: 'tech-firm', label: 'Health Technology & Innovation Company' },
+    { value: 'medical-equipment', label: 'Medical Equipment Manufacturer/Distributor' },
+    { value: 'oem', label: 'Original Equipment Manufacturer (OEM)' },
+    { value: 'staffing-agency', label: 'Medical/Nursing Staffing Agency' },
+    { value: 'laboratory', label: 'Medical Laboratory/Diagnostic Center' },
     { value: 'association', label: 'Professional Association/Society' },
     { value: 'government', label: 'Government/Regulatory Body' },
     { value: 'ngo', label: 'Non-Governmental Organization (NGO)' },
     { value: 'academic', label: 'Academic/Research Institution' },
     { value: 'other', label: 'Others' }
-  ];
+];
 
   const watchedOrganizationType = watch('organizationType');
   const currentYear = new Date().getFullYear();

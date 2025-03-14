@@ -118,13 +118,18 @@ export default function MemberDetailPage() {
       'healthcare-provider': 'Healthcare Provider',
       'pharmaceutical': 'Pharmaceutical Company',
       'insurance': 'Health Insurance Provider',
-      'tech-firm': 'Health Technology Firm',
-      'association': 'Professional Association',
+      'tech-firm': 'Health Technology & Innovation Company',
+      'medical-equipment': 'Medical Equipment Manufacturer/Distributor',
+      'oem': 'Original Equipment Manufacturer (OEM)',
+      'staffing-agency': 'Medical/Nursing Staffing Agency',
+      'laboratory': 'Medical Laboratory/Diagnostic Center',
+      'association': 'Professional Association/Society',
       'government': 'Government/Regulatory Body',
-      'ngo': 'NGO',
+      'ngo': 'Non-Governmental Organization (NGO)',
       'academic': 'Academic/Research Institution',
-      'other': 'Other'
+      'other': 'Others'
     };
+    
 
     return types.map(type => typeLabels[type] || type).join(', ');
   };
@@ -133,15 +138,19 @@ export default function MemberDetailPage() {
     'primary-healthcare': 'Primary Healthcare',
     'secondary-healthcare': 'Secondary Healthcare',
     'tertiary-healthcare': 'Tertiary Healthcare',
-    'pharmaceuticals': 'Pharmaceuticals',
-    'medical-equipment': 'Medical Equipment & Supplies',
+    'pharmaceuticals': 'Pharmaceuticals Manufacturing & Distribution',
+    'medical-equipment': 'Medical Equipment & Devices',
     'health-insurance': 'Health Insurance & Financing',
+    'digital-health': 'Health Technology & Digital Health Solutions',
+    'staffing-and-hr': 'Medical/Nursing Staffing & Human Resources',
+    'medical-laboratory': 'Medical Laboratory & Diagnostics',
     'public-health': 'Public Health & Advocacy',
-    'health-technology': 'Health Technology & Innovation',
     'capacity-building': 'Capacity Building & Training',
     'research': 'Research & Development',
-    'other': 'Other'
-  };
+    'policy-regulation': 'Policy & Regulation',
+    'other': 'Others'
+};
+
 
   return (
     <div className="min-h-screen flex flex-col bg-white">

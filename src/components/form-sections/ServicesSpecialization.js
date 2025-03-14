@@ -8,15 +8,21 @@ const ServicesSpecialization = () => {
     { value: 'primary-healthcare', label: 'Primary Healthcare' },
     { value: 'secondary-healthcare', label: 'Secondary Healthcare' },
     { value: 'tertiary-healthcare', label: 'Tertiary Healthcare' },
-    { value: 'pharmaceuticals', label: 'Pharmaceuticals & Drug Manufacturing' },
-    { value: 'medical-equipment', label: 'Medical Equipment & Supplies' },
+    { value: 'pharmaceuticals', label: 'Pharmaceuticals Manufacturing & Distribution' },
+    { value: 'medical-equipment', label: 'Medical Equipment & Devices' },
     { value: 'health-insurance', label: 'Health Insurance & Financing' },
+    { value: 'digital-health', label: 'Health Technology & Digital Health Solutions' },
+    { value: 'staffing-and-hr', label: 'Medical/Nursing Staffing & Human Resources' },
+    { value: 'medical-laboratory', label: 'Medical Laboratory & Diagnostics' },
     { value: 'public-health', label: 'Public Health & Advocacy' },
-    { value: 'health-technology', label: 'Health Technology & Innovation' },
     { value: 'capacity-building', label: 'Capacity Building & Training' },
     { value: 'research', label: 'Research & Development' },
+    { value: 'policy-regulation', label: 'Policy & Regulation' },
     { value: 'other', label: 'Others' }
-  ];
+];
+
+
+
 
   const watchedSpecialization = watch('specialization');
 
