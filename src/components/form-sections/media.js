@@ -27,7 +27,7 @@ const Media = ({ onSubmitData, defaultValues = {} }) => {
 
         <div className="mb-6">
           <label className="block text-sm font-medium text-gray-700 mb-3">
-            Would you like your organization to be featured in HFN publications, newsletters, or website? <span className="text-red-500">*</span>
+            Would you like your organisation to be featured in HFN publications, newsletters, or website? <span className="text-red-500">*</span>
           </label>
           <div className="flex space-x-8 mt-2">
             <CustomRadio

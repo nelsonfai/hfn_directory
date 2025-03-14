@@ -102,7 +102,7 @@ const CEODetails = () => {
             register={register}
             watch={watch}
             errors={errors}
-            label="The CEO/Head of Organization is the primary contact person for this organization"
+            label="The CEO/Head of Organisation is the primary contact person for this organization"
             onChange={handlePrimaryContactChange}
           />
           <p className="text-xs text-gray-500 mt-2 ml-7">

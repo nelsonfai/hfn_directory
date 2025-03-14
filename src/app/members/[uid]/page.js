@@ -124,7 +124,7 @@ export default function MemberDetailPage() {
       'staffing-agency': 'Medical/Nursing Staffing Agency',
       'laboratory': 'Medical Laboratory/Diagnostic Center',
       'association': 'Professional Association/Society',
-      'ngo': 'Non-Governmental Organization (NGO)',
+      'ngo': 'Non-Governmental Organisation (NGO)',
       'academic': 'Academic/Research Institution',
       'other': 'Others'
     };
@@ -195,7 +195,7 @@ export default function MemberDetailPage() {
                 className="flex justify-between items-center p-5 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors duration-200"
                 onClick={() => toggleSection('general')}
               >
-                <h2 className="text-lg font-semibold text-gray-800">Organization Overview</h2>
+                <h2 className="text-lg font-semibold text-gray-800">Organisation Overview</h2>
                 <button className="text-gray-500 hover:text-gray-700 transition-colors duration-200">
                   {expandedSections.general ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
                 </button>
@@ -217,7 +217,7 @@ export default function MemberDetailPage() {
                       <p className="text-gray-800 font-medium">{memberData.region}</p>
                     </div>
                     <div className="bg-gray-50 p-3 rounded-lg">
-                      <h3 className="text-xs font-medium text-gray-500 mb-1">Organization Type</h3>
+                      <h3 className="text-xs font-medium text-gray-500 mb-1">Organisation Type</h3>
                       <p className="text-gray-800 font-medium">{formatOrganizationTypes(memberData.organizationType)}</p>
                     </div>
                     <div className="bg-gray-50 p-3 rounded-lg">
@@ -448,7 +448,7 @@ export default function MemberDetailPage() {
                 className="flex justify-between items-center p-5 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors duration-200"
                 onClick={() => toggleSection('ceo')}
               >
-                <h2 className="text-lg font-semibold text-gray-800">CEO/Head of Organization</h2>
+                <h2 className="text-lg font-semibold text-gray-800">CEO/Head of Organisation</h2>
                 <button className="text-gray-500 hover:text-gray-700 transition-colors duration-200">
                   {expandedSections.ceo ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
                 </button>
@@ -523,7 +523,7 @@ export default function MemberDetailPage() {
                         </div>
                         {memberData.isCeoPrimaryContact && (
                           <div className="mt-2 pt-2 border-t border-gray-200">
-                            <p className="text-xs text-gray-600 italic">CEO/Head of Organization</p>
+                            <p className="text-xs text-gray-600 italic">CEO/Head of Organisation</p>
                           </div>
                         )}
                       </div>

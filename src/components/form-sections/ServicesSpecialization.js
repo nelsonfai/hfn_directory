@@ -50,7 +50,7 @@ const ServicesSpecialization = () => {
         <div className="space-y-6">
           <div>
             <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
-              Brief Description of Organization/Services Offered (100 words max) <span className="text-red-500">*</span>
+              Brief Description of Organisation/Services Offered (100 words max) <span className="text-red-500">*</span>
             </label>
             <textarea
               id="description"

@@ -11,11 +11,11 @@ const Technology = () => {
     <div className="space-y-6 animate-fadeIn">
 
         <div>
-          <p className="text-sm text-gray-700"><span className="font-bold"> Note:</span>Providing this information is optional and intended solely for the purpose of facilitating potential collaborations and matching withing the HFN network</p>
+          <p className="text-sm text-gray-700"><span className="font-bold"> Note:</span>Providing this information is optional and intended solely for the purpose of facilitating potential collaborations and matching within the HFN network</p>
         </div>
       <div className="mb-8">
         <label className="block text-sm font-medium text-gray-700 mb-3">
-          Does your organization use any digital health solutions? (optional)
+          Does your organisation use any digital health solutions? (optional)
         </label>
         <div className="flex space-x-8 mt-2">
           <CustomRadio
@@ -70,7 +70,7 @@ const Technology = () => {
 
       <div className="mb-8">
         <label className="block text-sm font-medium text-gray-700 mb-3">
-          Would your organization be interested in digital health collaboration or innovations? (optional)
+          Would your organisation be interested in digital health collaboration or innovations? (optional)
         </label>
         <div className="flex space-x-8 mt-2">
           <CustomRadio

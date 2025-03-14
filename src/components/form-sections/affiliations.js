@@ -151,7 +151,7 @@ const Affiliations = () => {
             </label>
             <textarea
               id="governmentCollaborations"
-              placeholder="e.g., World Health Organization, Ministry of Health"
+              placeholder="e.g., World Health Organisation, Ministry of Health"
               rows="3"
               className={`w-full px-4 py-2 border ${errors.governmentCollaborations ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-[#fb8c01]'} rounded focus:outline-none focus:ring-1 focus:border-[#fb8c01] transition-colors`}
               {...register('governmentCollaborations', { 

@@ -84,7 +84,7 @@ const Declaration = () => {
           register={register}
           watch={watch}
           errors={errors}
-          label={`I ${fullName  || ''} confirm that the information provided above is accurate and I consent to the inclusion of my organization in the HFN Directory.`}
+          label={`I ${fullName  || ''} confirm that the information provided above is accurate and I consent to the inclusion of my organisation in the HFN Directory.`}
           onChange={handleConsentChange}
         />
         {errors.consentGiven && (

@@ -263,7 +263,7 @@ const MultiStepForm = () => {
   const getStepTitle = () => {
     switch(currentStep) {
       case 1: return "General Information";
-      case 2: return "CEO/Head of Organization";
+      case 2: return "CEO/Head of Organisation";
       case 3: return isCeoPrimaryContact ? "Contact Person Details (Optional)" : "Contact Person Details";
       case 4: return "Services & Specialization";
       case 5: return "Affiliations & Memberships";

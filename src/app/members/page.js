@@ -246,7 +246,7 @@ export default function MembersDirectory() {
                 {/* Organization Type Filter */}
                 <div>
                   <label htmlFor="organizationType" className="block text-sm font-medium text-gray-600 mb-2">
-                    Organization Type
+                    Organisation Type
                   </label>
                   <div className="relative">
                     <select

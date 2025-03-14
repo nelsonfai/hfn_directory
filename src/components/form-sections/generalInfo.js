@@ -16,7 +16,7 @@ const GeneralInfo = () => {
     { value: 'staffing-agency', label: 'Medical/Nursing Staffing Agency' },
     { value: 'laboratory', label: 'Medical Laboratory/Diagnostic Center' },
     { value: 'association', label: 'Professional Association/Society' },
-    { value: 'ngo', label: 'Non-Governmental Organization (NGO)' },
+    { value: 'ngo', label: 'Non-Governmental Organisation (NGO)' },
     { value: 'academic', label: 'Academic/Research Institution' },
     { value: 'other', label: 'Others' }
 ];
@@ -72,7 +72,7 @@ const GeneralInfo = () => {
               id="organizationName"
               className={`w-full px-4 py-2 border ${errors.organizationName ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-[#fb8c01]'} rounded focus:outline-none focus:ring-1 focus:border-[#fb8c01] transition-colors`}
               {...register('organizationName', { 
-                required: 'Organization name is required' 
+                required: 'Organisation name is required' 
               })}
             />
             {errors.organizationName && (
@@ -84,7 +84,7 @@ const GeneralInfo = () => {
          {/* Logo Upload Section */}
 <div className="mt-6">
   <label className="block text-sm font-medium text-gray-700 mb-3">
-    Organization Logo (Optional)
+    Organisation Logo (Optional)
   </label>
   
   <div className="mt-1 flex ">
@@ -153,7 +153,7 @@ const GeneralInfo = () => {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-3">
-              Type of Organization (Select one or more as applicable) <span className="text-red-500">*</span>
+              Type of Organisation (Select one or more as applicable) <span className="text-red-500">*</span>
             </label>
             <div className="space-y-2">
               {organizationTypes.map((type) => (
@@ -164,7 +164,7 @@ const GeneralInfo = () => {
                       id={`organizationType-${type.value}`}
                       className="sr-only"
                       {...register('organizationType', {
-                        validate: value => (value && value.length > 0) || 'Please select at least one organization type'
+                        validate: value => (value && value.length > 0) || 'Please select at least one organisation type'
                       })}
                       value={type.value}
                       onChange={() => handleOrganizationTypeChange(type.value)}
@@ -207,7 +207,7 @@ const GeneralInfo = () => {
                   className={`w-full px-4 py-2 border ${errors.organizationTypeOther ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-[#fb8c01]'} rounded focus:outline-none focus:ring-1 focus:border-[#fb8c01] transition-colors`}
                   {...register('organizationTypeOther', { 
                     required: watchedOrganizationType && watchedOrganizationType.includes('other') ? 
-                      'Please specify the other organization type' : false
+                      'Please specify the other organisation type' : false
                   })}
                 />
                 {errors.organizationTypeOther && (
