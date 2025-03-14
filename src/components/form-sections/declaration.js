@@ -84,7 +84,7 @@ const Declaration = () => {
           register={register}
           watch={watch}
           errors={errors}
-          label="I confirm that the information provided above is accurate and I consent to the inclusion of my organization in the HFN Directory."
+          label={`I ${fullName  || ''} confirm that the information provided above is accurate and I consent to the inclusion of my organization in the HFN Directory.`}
           onChange={handleConsentChange}
         />
         {errors.consentGiven && (
@@ -94,20 +94,7 @@ const Declaration = () => {
         )}
       </div>
 
-      <div className="mt-6 border-t border-gray-200 pt-6">
-        <div className="flex items-center">
-          <div className="flex-shrink-0">
-            <svg className="h-5 w-5 text-[#5fb775]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-            </svg>
-          </div>
-          <div className="ml-3">
-            <p className="text-sm text-gray-700">
-              By submitting this form, you are completing the final step to join the HFN Directory. Your information will be reviewed by our team before being published.
-            </p>
-          </div>
-        </div>
-      </div>
+
     </div>
   );
 };

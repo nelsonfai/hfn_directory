@@ -186,7 +186,7 @@ const MultiStepForm = () => {
       case 5:
         return ["memberOfAssociations", "associations", "membershipNumber", "collaboratesWithGovOrg", "governmentCollaborations"];
       case 6:
-        return ["usesDigitalSolutions", "interestedInDigitalCollaboration"];
+        return [];
       case 7:
         return ["isLicensed", "regulatoryAuthority", "registrationNumber", "certifications"];
       case 8:
@@ -236,9 +236,9 @@ const MultiStepForm = () => {
       case 1:
         return <GeneralInfo />;
       case 2:
-        return <CEODetails />; // New CEO section
+        return <CEODetails />; 
       case 3:
-        return <ContactDetails />; // Now step 3
+        return <ContactDetails />; 
       case 4:
         return <ServicesSpecialization />;
       case 5:

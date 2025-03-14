@@ -7,6 +7,17 @@ const Regulatory = () => {
 
   const isLicensed = watch('isLicensed');
   const hasInternationalCertifications = watch('hasInternationalCertifications');
+  const regulatoryAuthorityType = watch('regulatoryAuthorityType');
+
+  // Regulatory authority options
+  const regulatoryOptions = [
+    { value: '', label: 'Select an authority' },
+    { value: 'NAFDAC', label: 'NAFDAC' },
+    { value: 'NHIS', label: 'NHIS' },
+    { value: 'MDCN', label: 'MDCN' },
+    { value: 'PCN', label: 'PCN' },
+    { value: 'other', label: 'Other' }
+  ];
 
   return (
     <div className="space-y-6 animate-fadeIn">
@@ -43,30 +54,65 @@ const Regulatory = () => {
         <div className="border-l-4 border-[#fb8c01] pl-4 py-2 mb-8 transition-all duration-300 ease-in">
           <div className="space-y-4">
             <div>
-              <label htmlFor="regulatoryAuthority" className="block text-sm font-medium text-gray-700 mb-1">
-                Please specify regulatory authority (e.g., NAFDAC, NHIS, MDCN, PCN, etc.) <span className="text-red-500">*</span>
+              <label htmlFor="regulatoryAuthorityType" className="block text-sm font-medium text-gray-700 mb-1">
+                Please select regulatory authority <span className="text-red-500">*</span>
               </label>
               <Controller
-                name="regulatoryAuthority"
+                name="regulatoryAuthorityType"
                 control={control}
                 rules={{ required: isLicensed === "true" ? "Regulatory authority is required" : false }}
                 render={({ field }) => (
                   <>
-                    <input
-                      type="text"
-                      id="regulatoryAuthority"
+                    <select
+                      id="regulatoryAuthorityType"
                       {...field}
                       className={`w-full px-4 py-2 border ${
-                        errors.regulatoryAuthority ? 'border-red-500' : 'border-gray-300'
+                        errors.regulatoryAuthorityType ? 'border-red-500' : 'border-gray-300'
                       } rounded-md focus:outline-none focus:ring-2 focus:ring-[#fb8c01] focus:border-[#fb8c01] transition-colors`}
-                    />
-                    {errors.regulatoryAuthority && (
-                      <p className="mt-1 text-sm text-red-600">{errors.regulatoryAuthority.message}</p>
+                    >
+                      {regulatoryOptions.map(option => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.regulatoryAuthorityType && (
+                      <p className="mt-1 text-sm text-red-600">{errors.regulatoryAuthorityType.message}</p>
                     )}
                   </>
                 )}
               />
             </div>
+
+            {regulatoryAuthorityType === 'other' && (
+              <div>
+                <label htmlFor="otherRegulatoryAuthority" className="block text-sm font-medium text-gray-700 mb-1">
+                  Please specify other regulatory authority <span className="text-red-500">*</span>
+                </label>
+                <Controller
+                  name="otherRegulatoryAuthority"
+                  control={control}
+                  rules={{ 
+                    required: regulatoryAuthorityType === 'other' ? "Please specify the other regulatory authority" : false 
+                  }}
+                  render={({ field }) => (
+                    <>
+                      <input
+                        type="text"
+                        id="otherRegulatoryAuthority"
+                        {...field}
+                        className={`w-full px-4 py-2 border ${
+                          errors.otherRegulatoryAuthority ? 'border-red-500' : 'border-gray-300'
+                        } rounded-md focus:outline-none focus:ring-2 focus:ring-[#fb8c01] focus:border-[#fb8c01] transition-colors`}
+                      />
+                      {errors.otherRegulatoryAuthority && (
+                        <p className="mt-1 text-sm text-red-600">{errors.otherRegulatoryAuthority.message}</p>
+                      )}
+                    </>
+                  )}
+                />
+              </div>
+            )}
 
             <div>
               <label htmlFor="registrationNumber" className="block text-sm font-medium text-gray-700 mb-1">
