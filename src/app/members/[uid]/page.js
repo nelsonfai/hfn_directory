@@ -253,10 +253,17 @@ export default function MemberDetailPage() {
                   {memberData.specialization.includes('medical-equipment') && (
                     <div className="mt-3 p-3 bg-gray-50 rounded-lg">
                       <h3 className="text-xs font-medium text-gray-500 mb-1">Customs Assistance</h3>
+                      <div className="flex items-center">
+                      <div className={`w-2 h-2 rounded-full mr-2 ${memberData.interestedInDigitalCollaboration ? 'bg-[#5fb775]' : 'bg-gray-300'}`}></div>
+
                       <p className="text-gray-800 font-medium">
                         {memberData.requiresCustomsAssistance ? 'Requires customs clearance assistance' : 'Does not require customs assistance'}
                       </p>
+                      </div>
                     </div>
+
+
+
                   )}
                 </div>
               )}
