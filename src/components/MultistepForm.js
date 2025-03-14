@@ -2,11 +2,12 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { doc, setDoc } from 'firebase/firestore';
 import { db } from '@/firebase/config';
-import { ChevronLeft, ChevronRight, Send, Clock, CheckCircle, X ,AlertCircle} from 'lucide-react';
+import { ChevronLeft, ChevronRight, Send, Clock, CheckCircle, X, AlertCircle } from 'lucide-react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 // Form sections components
 import GeneralInfo from './form-sections/generalInfo';
+import CEODetails from './form-sections/ceoDetails'; // New component for CEO details
 import ContactDetails from './form-sections/contactDetails';
 import ServicesSpecialization from './form-sections/ServicesSpecialization';
 import Affiliations from './form-sections/affiliations';
@@ -41,6 +42,13 @@ const MultiStepForm = () => {
     website: '',
     email: '',
     phone: '',
+    
+    // CEO/Head of Organization Details
+    ceoName: '',
+    ceoDesignation: '',
+    ceoEmail: '',
+    ceoPhone: '',
+    isCeoPrimaryContact: false, // Flag to determine if CEO is primary contact
     
     // Contact Person Details
     primaryContactName: '',
@@ -141,7 +149,7 @@ const MultiStepForm = () => {
     return () => subscription.unsubscribe();
   }, [methods]);
 
-  const totalSteps = 10;
+  const totalSteps = 11; // Updated to 11 steps
   
   const nextStep = async () => {
     const isValid = await methods.trigger(getFieldsToValidate());
@@ -162,27 +170,32 @@ const MultiStepForm = () => {
     }
   };
   
+  // Watch the isCeoPrimaryContact field to dynamically adjust validation
+  const isCeoPrimaryContact = methods.watch('isCeoPrimaryContact');
+  
   const getFieldsToValidate = () => {
     switch(currentStep) {
       case 1:
         return ["organizationName", "organizationType", "organizationTypeOther", "yearEstablished", "email"];
       case 2:
-        return ["primaryContactName", "primaryEmail"];
+        return ["ceoName", "ceoEmail"];
       case 3:
-        return ["description","specialization"];
+        return isCeoPrimaryContact ? [] : ["primaryContactName", "primaryEmail"];
       case 4:
-        return ["memberOfAssociations", "associations", "membershipNumber", "collaboratesWithGovOrg","governmentCollaborations"];
+        return ["description", "specialization"];
       case 5:
-        return ["usesDigitalSolutions", "interestedInDigitalCollaboration"];
+        return ["memberOfAssociations", "associations", "membershipNumber", "collaboratesWithGovOrg", "governmentCollaborations"];
       case 6:
-        return ["isLicensed", "regulatoryAuthority", "registrationNumber","certifications"];
+        return ["usesDigitalSolutions", "interestedInDigitalCollaboration"];
       case 7:
-        return ["interestedInCollaboration", "collaborationAreas", "collaborationAreasOther"];
+        return ["isLicensed", "regulatoryAuthority", "registrationNumber", "certifications"];
       case 8:
-        return ["allowFeatureInPublications"];
+        return ["interestedInCollaboration", "collaborationAreas", "collaborationAreasOther"];
       case 9:
-        return []; // No required fields for Additional Information
+        return ["allowFeatureInPublications"];
       case 10:
+        return []; // No required fields for Additional Information
+      case 11:
         return ["fullName", "consentGiven", "date"];
       default:
         return [];
@@ -193,11 +206,13 @@ const MultiStepForm = () => {
     setIsSubmitting(true);
     try {
       const organizationId = data.organizationName.toLowerCase().replace(/\s+/g, '-');
-      console.log(data)
+      console.log(data);
+      
       // Clear localStorage after successful submission
       localStorage.removeItem(STORAGE_KEY);
-       // Reset the form to default values
-    methods.reset(defaultValues);
+      
+      // Reset the form to default values
+      methods.reset(defaultValues);
 
       // Show success modal instead of alert
       setShowSuccessModal(true);
@@ -221,22 +236,24 @@ const MultiStepForm = () => {
       case 1:
         return <GeneralInfo />;
       case 2:
-        return <ContactDetails />;
+        return <CEODetails />; // New CEO section
       case 3:
-        return <ServicesSpecialization />;
+        return <ContactDetails />; // Now step 3
       case 4:
-        return <Affiliations />;
+        return <ServicesSpecialization />;
       case 5:
-        return <Technology />;
+        return <Affiliations />;
       case 6:
-        return <Regulatory />;
+        return <Technology />;
       case 7:
-        return <Collaboration />;
+        return <Regulatory />;
       case 8:
-        return <Media />;
+        return <Collaboration />;
       case 9:
-        return <AdditionalInfo />;
+        return <Media />;
       case 10:
+        return <AdditionalInfo />;
+      case 11:
         return <Declaration />;
       default:
         return <GeneralInfo />;
@@ -246,15 +263,16 @@ const MultiStepForm = () => {
   const getStepTitle = () => {
     switch(currentStep) {
       case 1: return "General Information";
-      case 2: return "Contact Person Details";
-      case 3: return "Services & Specialization";
-      case 4: return "Affiliations & Memberships";
-      case 5: return "Technology & Innovation";
-      case 6: return "Regulatory Compliance & Certifications";
-      case 7: return "Collaboration & Networking";
-      case 8: return "Media & Publicity";
-      case 9: return "Additional Information";
-      case 10: return "Declaration & Consent";
+      case 2: return "CEO/Head of Organization";
+      case 3: return isCeoPrimaryContact ? "Contact Person Details (Optional)" : "Contact Person Details";
+      case 4: return "Services & Specialization";
+      case 5: return "Affiliations & Memberships";
+      case 6: return "Technology & Innovation";
+      case 7: return "Regulatory Compliance & Certifications";
+      case 8: return "Collaboration & Networking";
+      case 9: return "Media & Publicity";
+      case 10: return "Additional Information";
+      case 11: return "Declaration & Consent";
       default: return "General Information";
     }
   };
@@ -269,7 +287,7 @@ const MultiStepForm = () => {
         <div className="container mx-auto px-6">
           <h1 className="text-3xl font-bold text-white mb-2">HFN Stakeholder Directory Questionnaire</h1>
         
-          <p className="text-white ">
+          <p className="text-white">
               *** Confidentiality Notice: The information collected will be used solely for the
               purpose of creating the HFN membership directory and enhancing collaboration
               among stakeholders
@@ -308,7 +326,7 @@ const MultiStepForm = () => {
           </div>
           
           {validationError && (
-            <div className="flex items-center text-xs text-red-500 font-medium  py-1 rounded-full mt-1 sm:mt-0 ">
+            <div className="flex items-center text-xs text-red-500 font-medium py-1 rounded-full mt-1 sm:mt-0">
               <AlertCircle className="h-3 w-3 mr-1" />
               Please complete all required fields highlighted below
             </div>
@@ -372,7 +390,7 @@ const MultiStepForm = () => {
           <div className="bg-white rounded-lg shadow-xl p-6 sm:p-8 max-w-md w-full mx-4 sm:mx-0 animate-fadeIn">
             <div className="flex justify-between items-start mb-4">
               <div className="flex items-center">
-                <CheckCircle className="w-8 h-8 text-[#5fb775] mr-3" />
+              <CheckCircle className="w-8 h-8 text-[#5fb775] mr-3" />
                 <h3 className="text-xl font-bold text-gray-800">Submission Successful!</h3>
               </div>
               <button 

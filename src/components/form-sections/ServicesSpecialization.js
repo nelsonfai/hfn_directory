@@ -34,10 +34,13 @@ const ServicesSpecialization = () => {
     setValue('specialization', updatedTypes, { shouldValidate: true });
   };
 
+  const handleCustomsAssistanceChange = (value) => {
+    setValue('requiresCustomsAssistance', value, { shouldValidate: true });
+  };
+
   return (
     <div className="space-y-10">
       <div>
-
         <div className="space-y-6">
           <div>
             <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
@@ -78,7 +81,6 @@ const ServicesSpecialization = () => {
                       className="sr-only"
                       {...register('specialization', {
                         validate: (value) => (value && value.length > 0) || 'Please select at least one specialization'
-
                       })}
                       value={type.value}
                       onChange={() => handleSpecializationChange(type.value)}
@@ -111,6 +113,88 @@ const ServicesSpecialization = () => {
               <p className="mt-1 text-sm text-red-600">{errors.specialization.message}</p>
             )}
             
+            {/* Medical Equipment & Supplies - Customs Assistance Question */}
+            {watchedSpecialization && watchedSpecialization.includes('medical-equipment') && (
+              <div className="border-l-4 border-[#fb8c01] pl-4 py-2 mt-4 transition-all duration-300 ease-in">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Do you require assistance with customs to clear your equipment and supplies? <span className="text-red-500">*</span>
+                </label>
+                <div className="flex items-start space-x-6">
+                  <div className="flex items-center">
+                    <div className="relative">
+                      <input
+                        type="radio"
+                        id="customs-assistance-yes"
+                        value="yes"
+                        className="sr-only"
+                        {...register('requiresCustomsAssistance', {
+                          required: watchedSpecialization && watchedSpecialization.includes('medical-equipment') ?
+                            'Please select yes or no' : false
+                        })}
+                      />
+                      <div 
+                        className={`w-5 h-5 rounded-full border ${
+                          watch('requiresCustomsAssistance') === 'yes' 
+                            ? 'border-[#5fb775]' 
+                            : errors.requiresCustomsAssistance ? 'border-red-500' : 'border-gray-300'
+                        } flex items-center justify-center cursor-pointer`}
+                        onClick={() => handleCustomsAssistanceChange('yes')}
+                      >
+                        {watch('requiresCustomsAssistance') === 'yes' && (
+                          <div className="w-3 h-3 rounded-full bg-[#5fb775]"></div>
+                        )}
+                      </div>
+                    </div>
+                    <label 
+                      htmlFor="customs-assistance-yes" 
+                      className="ml-2 block text-sm text-gray-700 cursor-pointer"
+                      onClick={() => handleCustomsAssistanceChange('yes')}
+                    >
+                      Yes
+                    </label>
+                  </div>
+
+                  <div className="flex items-center">
+                    <div className="relative">
+                      <input
+                        type="radio"
+                        id="customs-assistance-no"
+                        value="no"
+                        className="sr-only"
+                        {...register('requiresCustomsAssistance', {
+                          required: watchedSpecialization && watchedSpecialization.includes('medical-equipment') ?
+                            'Please select yes or no' : false
+                        })}
+                      />
+                      <div 
+                        className={`w-5 h-5 rounded-full border ${
+                          watch('requiresCustomsAssistance') === 'no' 
+                            ? 'border-[#5fb775]' 
+                            : errors.requiresCustomsAssistance ? 'border-red-500' : 'border-gray-300'
+                        } flex items-center justify-center cursor-pointer`}
+                        onClick={() => handleCustomsAssistanceChange('no')}
+                      >
+                        {watch('requiresCustomsAssistance') === 'no' && (
+                          <div className="w-3 h-3 rounded-full bg-[#5fb775]"></div>
+                        )}
+                      </div>
+                    </div>
+                    <label 
+                      htmlFor="customs-assistance-no" 
+                      className="ml-2 block text-sm text-gray-700 cursor-pointer"
+                      onClick={() => handleCustomsAssistanceChange('no')}
+                    >
+                      No
+                    </label>
+                  </div>
+                </div>
+                {errors.requiresCustomsAssistance && (
+                  <p className="mt-1 text-sm text-red-600">{errors.requiresCustomsAssistance.message}</p>
+                )}
+              </div>
+            )}
+            
+            {/* Other Specialization Field */}
             {watchedSpecialization && watchedSpecialization.includes('other') && (
               <div className="border-l-4 border-[#fb8c01] pl-4 py-2 mt-4 transition-all duration-300 ease-in">
                 <label htmlFor="specializationOther" className="block text-sm font-medium text-gray-700 mb-2">

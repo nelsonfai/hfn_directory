@@ -6,6 +6,7 @@ import { Linkedin, Twitter, Facebook, Instagram } from 'lucide-react';
 
 export default function MemberDetailPage() {
   const memberData = {
+    // General Information
     organizationLogo: '',
     organizationName: 'Sunshine Healthcare Alliance',
     organizationType: ['healthcare-provider', 'ngo'],
@@ -16,7 +17,16 @@ export default function MemberDetailPage() {
     website: 'https://www.sunshinehealthcare.org',
     email: 'info@sunshinehealthcare.org',
     phone: '+234-801-234-5678',
-    primaryContactName: 'Dr. Adebayo Johnson',
+    
+    // CEO/Head of Organization Details
+    ceoName: 'Dr. Adebayo Johnson',
+    ceoDesignation: 'Executive Director',
+    ceoEmail: 'adebayo@sunshinehealthcare.org',
+    ceoPhone: '+234-801-234-5679',
+    isCeoPrimaryContact: true, // Flag to determine if CEO is primary contact
+    
+    // Contact Person Details
+    primaryContactName: 'Dr. Adebayo Johnson', // Same as CEO since isCeoPrimaryContact is true
     primaryDesignation: 'Executive Director',
     primaryEmail: 'adebayo@sunshinehealthcare.org',
     primaryPhone: '+234-801-234-5679',
@@ -24,30 +34,51 @@ export default function MemberDetailPage() {
     secondaryDesignation: 'Operations Manager',
     secondaryEmail: 'funmi@sunshinehealthcare.org',
     secondaryPhone: '+234-801-234-5680',
+    
+    // Services & Specialization
     description: 'Sunshine Healthcare Alliance is a leading provider of primary healthcare services with a focus on maternal and child health across Nigeria. Our mission is to improve healthcare access in underserved communities through innovative and sustainable approaches.',
-    specialization: ['primary-healthcare', 'public-health', 'capacity-building'],
+    specialization: ['primary-healthcare', 'public-health', 'capacity-building', 'medical-equipment'],
     specializationOther: 'Community health education',
+    requiresCustomsAssistance: true, // New field for medical equipment providers
+    
+    // Affiliations & Memberships
     memberOfAssociations: true,
     associations: 'Nigerian Medical Association, African Healthcare Federation',
     membershipNumber: 'NMA-12345, AHF-5678',
     collaboratesWithGovOrg: true,
     governmentCollaborations: 'Federal Ministry of Health, Lagos State Primary Healthcare Board',
+    
+    // Technology & Innovation
     usesDigitalSolutions: true,
     digitalSolutionsTypes: 'Electronic Medical Records, Telemedicine, Mobile Health Applications',
     interestedInDigitalCollaboration: true,
+    
+    // Regulatory Compliance & Certifications
     isLicensed: true,
     regulatoryAuthority: 'Nigerian Medical and Dental Council',
     registrationNumber: 'NMDC-2010-12345',
     hasInternationalCertifications: true,
     certifications: 'ISO 9001:2015, WHO Quality Standards',
+    
+    // Collaboration & Networking
     interestedInCollaboration: true,
     collaborationAreas: ['research', 'capacity-building', 'public-health'],
     collaborationAreasOther: 'Community outreach programs',
+    
+    // Media & Publicity
     allowFeatureInPublications: true,
     linkedIn: 'https://www.linkedin.com/company/sunshine-healthcare-alliance',
     twitter: 'https://twitter.com/sunshinehealth_ng',
     facebook: 'https://www.facebook.com/sunshinehealthcareng',
     instagram: 'https://www.instagram.com/sunshine_healthcare_ng',
+    
+    // Additional Information
+    additionalInfo: 'We are expanding our services to rural areas and seeking partnerships for mobile clinic solutions.',
+    
+    // Declaration & Consent
+    fullName: 'Dr. Adebayo Johnson',
+    consentGiven: true,
+    date: '2023-06-15',
   };
 
   // Generate organization initials if no logo is available
@@ -66,11 +97,13 @@ export default function MemberDetailPage() {
     general: true,
     services: true,
     contact: true,
+    ceo: true,
     affiliations: false,
     technology: false,
     regulatory: false,
     collaboration: false,
-    media: false
+    media: false,
+    additional: false
   });
 
   const toggleSection = (section) => {
@@ -112,7 +145,7 @@ export default function MemberDetailPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
-      <div className="bg-gradient-to-r from-[#fb8c01] to-[#5fb775] py-6 w-full  shadow-sm">
+      <div className="bg-gradient-to-r from-[#fb8c01] to-[#5fb775] py-6 w-full shadow-sm">
         <div className="container mx-auto px-6 w-full">
           <div className="flex items-center mb-6">
             <Link
@@ -149,7 +182,7 @@ export default function MemberDetailPage() {
       <main className="flex-1 container mx-auto px-4 md:px-6 py-8 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-5">
-            <section className="bg-white border border-gray-100 rounded-xl overflow-hidden    transition-shadow duration-200">
+            <section className="bg-white border border-gray-100 rounded-xl overflow-hidden transition-shadow duration-200">
               <div
                 className="flex justify-between items-center p-5 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors duration-200"
                 onClick={() => toggleSection('general')}
@@ -188,7 +221,7 @@ export default function MemberDetailPage() {
               )}
             </section>
 
-            <section className="bg-white border border-gray-100 rounded-xl overflow-hidden    transition-shadow duration-200">
+            <section className="bg-white border border-gray-100 rounded-xl overflow-hidden transition-shadow duration-200">
               <div
                 className="flex justify-between items-center p-5 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors duration-200"
                 onClick={() => toggleSection('services')}
@@ -201,7 +234,7 @@ export default function MemberDetailPage() {
 
               {expandedSections.services && (
                 <div className="px-5 py-4 border-t border-gray-100">
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2 mb-4">
                     {memberData.specialization.map((spec) => (
                       <span
                         key={spec}
@@ -216,11 +249,20 @@ export default function MemberDetailPage() {
                       </span>
                     )}
                   </div>
+                  
+                  {memberData.specialization.includes('medical-equipment') && (
+                    <div className="mt-3 p-3 bg-gray-50 rounded-lg">
+                      <h3 className="text-xs font-medium text-gray-500 mb-1">Customs Assistance</h3>
+                      <p className="text-gray-800 font-medium">
+                        {memberData.requiresCustomsAssistance ? 'Requires customs clearance assistance' : 'Does not require customs assistance'}
+                      </p>
+                    </div>
+                  )}
                 </div>
               )}
             </section>
 
-            <section className="bg-white border border-gray-100 rounded-xl overflow-hidden    transition-shadow duration-200">
+            <section className="bg-white border border-gray-100 rounded-xl overflow-hidden transition-shadow duration-200">
               <div
                 className="flex justify-between items-center p-5 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors duration-200"
                 onClick={() => toggleSection('affiliations')}
@@ -237,6 +279,13 @@ export default function MemberDetailPage() {
                     <div className="mb-4">
                       <h3 className="text-xs font-medium text-gray-500 mb-1">Professional Associations</h3>
                       <p className="text-gray-800">{memberData.associations}</p>
+                      
+                      {memberData.membershipNumber && (
+                        <div className="mt-3">
+                          <h3 className="text-xs font-medium text-gray-500 mb-1">Membership Numbers</h3>
+                          <p className="text-gray-800">{memberData.membershipNumber}</p>
+                        </div>
+                      )}
                     </div>
                   ) : (
                     <p className="text-gray-600 italic text-sm">Not a member of any associations</p>
@@ -252,9 +301,9 @@ export default function MemberDetailPage() {
               )}
             </section>
 
-            <section className="bg-white border border-gray-100 rounded-xl overflow-hidden    transition-shadow duration-200">
+            <section className="bg-white border border-gray-100 rounded-xl overflow-hidden transition-shadow duration-200">
               <div
-                className="flex justify-between items-center p-5 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors duration-200"
+                className="flex justify-between items-center p-5 cursor-pointer bg-gray-50hover:bg-gray-100 transition-colors duration-200"
                 onClick={() => toggleSection('technology')}
               >
                 <h2 className="text-lg font-semibold text-gray-800">Technology & Innovation</h2>
@@ -284,7 +333,7 @@ export default function MemberDetailPage() {
               )}
             </section>
 
-            <section className="bg-white border border-gray-100 rounded-xl overflow-hidden    transition-shadow duration-200">
+            <section className="bg-white border border-gray-100 rounded-xl overflow-hidden transition-shadow duration-200">
               <div
                 className="flex justify-between items-center p-5 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors duration-200"
                 onClick={() => toggleSection('regulatory')}
@@ -318,7 +367,7 @@ export default function MemberDetailPage() {
               )}
             </section>
 
-            <section className="bg-white border border-gray-100 rounded-xl overflow-hidden    transition-shadow duration-200">
+            <section className="bg-white border border-gray-100 rounded-xl overflow-hidden transition-shadow duration-200">
               <div
                 className="flex justify-between items-center p-5 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors duration-200"
                 onClick={() => toggleSection('collaboration')}
@@ -356,10 +405,64 @@ export default function MemberDetailPage() {
                 </div>
               )}
             </section>
+
+            {memberData.additionalInfo && (
+              <section className="bg-white border border-gray-100 rounded-xl overflow-hidden transition-shadow duration-200">
+                <div
+                  className="flex justify-between items-center p-5 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors duration-200"
+                  onClick={() => toggleSection('additional')}
+                >
+                  <h2 className="text-lg font-semibold text-gray-800">Additional Information</h2>
+                  <button className="text-gray-500 hover:text-gray-700 transition-colors duration-200">
+                    {expandedSections.additional ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
+                  </button>
+                </div>
+
+                {expandedSections.additional && (
+                  <div className="px-5 py-4 border-t border-gray-100">
+                    <p className="text-gray-700 text-sm">{memberData.additionalInfo}</p>
+                  </div>
+                )}
+              </section>
+            )}
           </div>
 
           <div className="space-y-5">
-            <section className="bg-white border border-gray-100 rounded-xl overflow-hidden    transition-shadow duration-200">
+            <section className="bg-white border border-gray-100 rounded-xl overflow-hidden transition-shadow duration-200">
+              <div
+                className="flex justify-between items-center p-5 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors duration-200"
+                onClick={() => toggleSection('ceo')}
+              >
+                <h2 className="text-lg font-semibold text-gray-800">CEO/Head of Organization</h2>
+                <button className="text-gray-500 hover:text-gray-700 transition-colors duration-200">
+                  {expandedSections.ceo ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
+                </button>
+              </div>
+
+              {expandedSections.ceo && (
+                <div className="px-5 py-4 border-t border-gray-100">
+                  <div className="bg-gray-50 rounded-lg p-4">
+                    <h4 className="font-medium text-gray-800 text-sm">{memberData.ceoName}</h4>
+                    <p className="text-xs text-gray-600 mb-2">{memberData.ceoDesignation}</p>
+                    <div className="flex items-center text-xs mb-1">
+                      <Mail className="h-3 w-3 text-gray-500 mr-1" />
+                      <a href={`mailto:${memberData.ceoEmail}`} className="text-gray-600 hover:text-[#5fb775]">{memberData.ceoEmail}</a>
+                    </div>
+                    <div className="flex items-center text-xs">
+                      <Phone className="h-3 w-3 text-gray-500 mr-1" />
+                      <a href={`tel:${memberData.ceoPhone}`} className="text-gray-600 hover:text-[#5fb775]">{memberData.ceoPhone}</a>
+                    </div>
+                    {memberData.isCeoPrimaryContact && (
+                      <div className="mt-2 pt-2 border-t border-gray-200">
+                        <p className="text-xs text-gray-600">Primary Contact for the Organization</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </section>
+
+            <section className="bg-white border border-gray-100 rounded-xl overflow-hidden transition-shadow duration-200">
               <div
                 className="flex justify-between items-center p-5 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors duration-200"
                 onClick={() => toggleSection('contact')}
@@ -391,6 +494,7 @@ export default function MemberDetailPage() {
                     <div className="pt-2">
                       <h3 className="text-sm font-medium text-gray-700 mb-3">Contact Persons</h3>
 
+                      {/* Show primary contact - either CEO or specific primary contact */}
                       <div className="bg-gray-50 rounded-lg p-4 mb-3">
                         <h4 className="font-medium text-gray-800 text-sm">{memberData.primaryContactName}</h4>
                         <p className="text-xs text-gray-600 mb-2">{memberData.primaryDesignation}</p>
@@ -402,6 +506,11 @@ export default function MemberDetailPage() {
                           <Phone className="h-3 w-3 text-gray-500 mr-1" />
                           <a href={`tel:${memberData.primaryPhone}`} className="text-gray-600 hover:text-[#5fb775]">{memberData.primaryPhone}</a>
                         </div>
+                        {memberData.isCeoPrimaryContact && (
+                          <div className="mt-2 pt-2 border-t border-gray-200">
+                            <p className="text-xs text-gray-600 italic">CEO/Head of Organization</p>
+                          </div>
+                        )}
                       </div>
 
                       {memberData.secondaryContactName && (
@@ -424,7 +533,7 @@ export default function MemberDetailPage() {
               )}
             </section>
 
-            <section className="bg-white border border-gray-100 rounded-xl overflow-hidden    transition-shadow duration-200">
+            <section className="bg-white border border-gray-100 rounded-xl overflow-hidden transition-shadow duration-200">
               <div
                 className="flex justify-between items-center p-5 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors duration-200"
                 onClick={() => toggleSection('media')}
@@ -438,26 +547,34 @@ export default function MemberDetailPage() {
               {expandedSections.media && (
                 <div className="px-5 py-4 border-t border-gray-100">
                   <div className="grid grid-cols-2 gap-3">
-                    <a href={memberData.linkedIn} target="_blank" rel="noopener noreferrer" 
-                      className="flex items-center p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-200">
-                      <Linkedin className="h-4 w-4 text-[#5fb775] mr-2" />
-                      <span className="text-gray-700 text-sm">LinkedIn</span>
-                    </a>
-                    <a href={memberData.twitter} target="_blank" rel="noopener noreferrer" 
-                      className="flex items-center p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-200">
-                      <Twitter className="h-4 w-4 text-[#5fb775] mr-2" />
-                      <span className="text-gray-700 text-sm">Twitter</span>
-                    </a>
-                    <a href={memberData.facebook} target="_blank" rel="noopener noreferrer" 
-                      className="flex items-center p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-200">
-                      <Facebook className="h-4 w-4 text-[#5fb775] mr-2" />
-                      <span className="text-gray-700 text-sm">Facebook</span>
-                    </a>
-                    <a href={memberData.instagram} target="_blank" rel="noopener noreferrer" 
-                      className="flex items-center p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-200">
-                      <Instagram className="h-4 w-4 text-[#5fb775] mr-2" />
-                      <span className="text-gray-700 text-sm">Instagram</span>
-                    </a>
+                    {memberData.linkedIn && (
+                      <a href={memberData.linkedIn} target="_blank" rel="noopener noreferrer" 
+                        className="flex items-center p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-200">
+                        <Linkedin className="h-4 w-4 text-[#5fb775] mr-2" />
+                        <span className="text-gray-700 text-sm">LinkedIn</span>
+                      </a>
+                    )}
+                    {memberData.twitter && (
+                      <a href={memberData.twitter} target="_blank" rel="noopener noreferrer" 
+                        className="flex items-center p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-200">
+                        <Twitter className="h-4 w-4 text-[#5fb775] mr-2" />
+                        <span className="text-gray-700 text-sm">Twitter</span>
+                      </a>
+                    )}
+                    {memberData.facebook && (
+                      <a href={memberData.facebook} target="_blank" rel="noopener noreferrer" 
+                        className="flex items-center p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-200">
+                        <Facebook className="h-4 w-4 text-[#5fb775] mr-2" />
+                        <span className="text-gray-700 text-sm">Facebook</span>
+                      </a>
+                    )}
+                    {memberData.instagram && (
+                      <a href={memberData.instagram} target="_blank" rel="noopener noreferrer" 
+                        className="flex items-center p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-200">
+                        <Instagram className="h-4 w-4 text-[#5fb775] mr-2" />
+                        <span className="text-gray-700 text-sm">Instagram</span>
+                      </a>
+                    )}
                   </div>
                 </div>
               )}
