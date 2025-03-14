@@ -124,7 +124,6 @@ export default function MemberDetailPage() {
       'staffing-agency': 'Medical/Nursing Staffing Agency',
       'laboratory': 'Medical Laboratory/Diagnostic Center',
       'association': 'Professional Association/Society',
-      'government': 'Government/Regulatory Body',
       'ngo': 'Non-Governmental Organization (NGO)',
       'academic': 'Academic/Research Institution',
       'other': 'Others'

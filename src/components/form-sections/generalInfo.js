@@ -16,7 +16,6 @@ const GeneralInfo = () => {
     { value: 'staffing-agency', label: 'Medical/Nursing Staffing Agency' },
     { value: 'laboratory', label: 'Medical Laboratory/Diagnostic Center' },
     { value: 'association', label: 'Professional Association/Society' },
-    { value: 'government', label: 'Government/Regulatory Body' },
     { value: 'ngo', label: 'Non-Governmental Organization (NGO)' },
     { value: 'academic', label: 'Academic/Research Institution' },
     { value: 'other', label: 'Others' }
