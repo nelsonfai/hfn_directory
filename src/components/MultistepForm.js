@@ -285,12 +285,12 @@ const MultiStepForm = () => {
       {/* Header bar */}
       <div className="bg-gradient-to-r from-[#fb8c01] to-[#5fb775] py-6">
         <div className="container mx-auto px-6">
-          <h1 className="text-3xl font-bold text-white mb-2">HFN Stakeholder Directory Questionnaire</h1>
+          <h1 className="text-3xl font-bold text-white mb-2">HFN Member Directory Questionnaire</h1>
         
           <p className="text-white">
               *** Confidentiality Notice: The information collected will be used solely for the
               purpose of creating the HFN membership directory and enhancing collaboration
-              among stakeholders
+              among members.
           </p>
         </div>
       </div>
@@ -403,7 +403,7 @@ const MultiStepForm = () => {
             
             <div className="mb-6">
               <p className="text-gray-600 mb-4">
-                Thank you for submitting your information to the HFN Stakeholder Directory. Your details have been recorded successfully.
+                Thank you for submitting your information to the HFN Member Directory. Your details have been recorded successfully.
               </p>
               <p className="text-gray-600">
                 We will review your submission and get back to you if we need any additional information.
