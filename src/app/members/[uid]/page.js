@@ -1,25 +1,31 @@
-'use client'
+'use client';
 
-import { useState } from 'react';
+import React,{ useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { ChevronDown, ChevronUp, Mail, Phone, Globe, ChevronLeft } from 'lucide-react';
 import { Linkedin, Twitter, Facebook, Instagram } from 'lucide-react';
 import useFirebase from '@/hooks/useFirebase';
 
-export default function MemberDetailPage({ params }) {
-  const { id } = params;
+export default function MemberDetailPage({params}) {
+  const unwrappedParams = React.use(params);
+  const { uid } = unwrappedParams;
+
+  console.log('ID:', uid);
   const { getMemberById } = useFirebase();
-  
+
   // Convert to client component with useState for data
   const [memberData, setMemberData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  
+
   // Fetch member data on mount
-  useState(() => {
+  useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getMemberById('PpFhshXl0uAtN4WD6cZp');
+        const data = await getMemberById(uid);
+        console.log('data',data)
+
         setMemberData(data);
         setLoading(false);
       } catch (err) {
@@ -27,9 +33,11 @@ export default function MemberDetailPage({ params }) {
         setLoading(false);
       }
     };
-    
-    fetchData();
-  }, [id, getMemberById]);
+
+    if (uid) {
+      fetchData();
+    }
+  }, [uid, getMemberById]);
 
   const getInitials = (name) => {
     if (!name) return '';
@@ -76,7 +84,7 @@ export default function MemberDetailPage({ params }) {
       'academic': 'Academic/Research Institution',
       'other': 'Others'
     };
-    
+
     return types?.map(type => typeLabels[type] || type).join(', ') || '';
   };
 
@@ -96,17 +104,16 @@ export default function MemberDetailPage({ params }) {
     'policy-regulation': 'Policy & Regulation',
     'other': 'Others'
   };
-  
-  if (loading) return <div className="flex justify-center p-10">Loading member data...</div>;
-  if (error) return <div className="text-red-500 p-10">Error: {error}</div>;
+
+  if (loading) return <div className="flex justify-center items-center p-10 min-h-[65vh]">Loading member data...</div>;
+  if (error) return (
+    <div className="bg-white flex justify-center items-center border border-gray-100 rounded-lg p-8 text-center w-full min-h-[65vh]">
+      <p className="text-gray-700 text-lg mb-4">No member found matching the member id.</p>
+    </div>
+  );
   if (!memberData) return <div className="p-10">No member data found</div>;
 
   const organizationInitials = getInitials(memberData.organizationName);
-
-
-
-
-
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
@@ -121,12 +128,12 @@ export default function MemberDetailPage({ params }) {
               Back to Directory
             </Link>
           </div>
-          
+
           <div className="md:flex items-center">
             {memberData.organizationLogo ? (
-              <img 
-                src={memberData.organizationLogo} 
-                alt={`${memberData.organizationName} logo`} 
+              <img
+                src={memberData.organizationLogo}
+                alt={`${memberData.organizationName} logo`}
                 className="h-16 w-16 rounded-lg shadow-lg mr-4"
               />
             ) : (
@@ -214,7 +221,7 @@ export default function MemberDetailPage({ params }) {
                       </span>
                     )}
                   </div>
-                  
+
                   {memberData.specialization.includes('medical-equipment') && (
                     <div className="mt-3 p-3 bg-gray-50 rounded-lg">
                       <h3 className="text-xs font-medium text-gray-500 mb-1">Customs Assistance</h3>
@@ -226,9 +233,6 @@ export default function MemberDetailPage({ params }) {
                       </p>
                       </div>
                     </div>
-
-
-
                   )}
                 </div>
               )}
@@ -251,7 +255,7 @@ export default function MemberDetailPage({ params }) {
                     <div className="mb-4">
                       <h3 className="text-xs font-medium text-gray-500 mb-1">Professional Associations</h3>
                       <p className="text-gray-800">{memberData.associations}</p>
-                      
+
                       {memberData.membershipNumber && (
                         <div className="mt-3">
                           <h3 className="text-xs font-medium text-gray-500 mb-1">Membership Numbers</h3>
@@ -275,7 +279,7 @@ export default function MemberDetailPage({ params }) {
 
             <section className="bg-white border border-gray-100 rounded-xl overflow-hidden transition-shadow duration-200">
               <div
-                className="flex justify-between items-center p-5 cursor-pointer bg-gray-50hover:bg-gray-100 transition-colors duration-200"
+                className="flex justify-between items-center p-5 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors duration-200"
                 onClick={() => toggleSection('technology')}
               >
                 <h2 className="text-lg font-semibold text-gray-800">Technology & Innovation</h2>
@@ -520,28 +524,28 @@ export default function MemberDetailPage({ params }) {
                 <div className="px-5 py-4 border-t border-gray-100">
                   <div className="grid grid-cols-2 gap-3">
                     {memberData.linkedIn && (
-                      <a href={memberData.linkedIn} target="_blank" rel="noopener noreferrer" 
+                      <a href={memberData.linkedIn} target="_blank" rel="noopener noreferrer"
                         className="flex items-center p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-200">
                         <Linkedin className="h-4 w-4 text-[#5fb775] mr-2" />
                         <span className="text-gray-700 text-sm">LinkedIn</span>
                       </a>
                     )}
                     {memberData.twitter && (
-                      <a href={memberData.twitter} target="_blank" rel="noopener noreferrer" 
+                      <a href={memberData.twitter} target="_blank" rel="noopener noreferrer"
                         className="flex items-center p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-200">
                         <Twitter className="h-4 w-4 text-[#5fb775] mr-2" />
                         <span className="text-gray-700 text-sm">Twitter</span>
                       </a>
                     )}
                     {memberData.facebook && (
-                      <a href={memberData.facebook} target="_blank" rel="noopener noreferrer" 
+                      <a href={memberData.facebook} target="_blank" rel="noopener noreferrer"
                         className="flex items-center p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-200">
                         <Facebook className="h-4 w-4 text-[#5fb775] mr-2" />
                         <span className="text-gray-700 text-sm">Facebook</span>
                       </a>
                     )}
                     {memberData.instagram && (
-                      <a href={memberData.instagram} target="_blank" rel="noopener noreferrer" 
+                      <a href={memberData.instagram} target="_blank" rel="noopener noreferrer"
                         className="flex items-center p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-200">
                         <Instagram className="h-4 w-4 text-[#5fb775] mr-2" />
                         <span className="text-gray-700 text-sm">Instagram</span>

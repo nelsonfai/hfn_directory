@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import CustomRadio from '../ui/CustomRadio'; // Ensure the path is correct
 
 const Regulatory = () => {
-  const { register, control, watch, formState: { errors } } = useFormContext();
+  const { register, control, watch, setValue, formState: { errors } } = useFormContext();
 
   const isLicensed = watch('isLicensed');
   const hasInternationalCertifications = watch('hasInternationalCertifications');
   const regulatoryAuthorityType = watch('regulatoryAuthorityType');
+  const otherRegulatoryAuthority = watch('otherRegulatoryAuthority');
 
   // Regulatory authority options
   const regulatoryOptions = [
@@ -18,6 +19,15 @@ const Regulatory = () => {
     { value: 'PCN', label: 'PCN' },
     { value: 'other', label: 'Other' }
   ];
+
+  // Update regulatoryAuthority based on regulatoryAuthorityType and otherRegulatoryAuthority
+  useEffect(() => {
+    if (regulatoryAuthorityType === 'other') {
+      setValue('regulatoryAuthority', otherRegulatoryAuthority);
+    } else {
+      setValue('regulatoryAuthority', regulatoryAuthorityType);
+    }
+  }, [regulatoryAuthorityType, otherRegulatoryAuthority, setValue]);
 
   return (
     <div className="space-y-6 animate-fadeIn">
@@ -92,8 +102,8 @@ const Regulatory = () => {
                 <Controller
                   name="otherRegulatoryAuthority"
                   control={control}
-                  rules={{ 
-                    required: regulatoryAuthorityType === 'other' ? "Please specify the other regulatory authority" : false 
+                  rules={{
+                    required: regulatoryAuthorityType === 'other' ? "Please specify the other regulatory authority" : false
                   }}
                   render={({ field }) => (
                     <>

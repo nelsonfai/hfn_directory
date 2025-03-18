@@ -110,13 +110,13 @@ const Collaboration = ({ onSubmitData, defaultValues = {} }) => {
                 render={({ field }) => (
                   <div className="mt-3">
                     <label htmlFor="collaborationAreasOther" className="block text-sm font-medium text-gray-700 mb-1">
-                      Please specify other areas
+                      Please specify other areas <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="text"
                       id="collaborationAreasOther"
                       {...field}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#fb8c01] focus:border-transparent"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:border-[#fb8c01] "
                     />
                     {errors.collaborationAreasOther && (
                       <p className="mt-1 text-sm text-red-600">{errors.collaborationAreasOther.message}</p>

@@ -188,13 +188,13 @@ const MultiStepForm = () => {
       case 6:
         return [];
       case 7:
-        return ["isLicensed", "regulatoryAuthority", "registrationNumber", "certifications"];
+        return ["isLicensed", "regulatoryAuthority", "registrationNumber", "certifications","otherRegulatoryAuthority"];
       case 8:
         return ["interestedInCollaboration", "collaborationAreas", "collaborationAreasOther"];
       case 9:
         return ["allowFeatureInPublications"];
       case 10:
-        return []; // No required fields for Additional Information
+        return [];
       case 11:
         return ["fullName", "consentGiven", "date"];
       default:
