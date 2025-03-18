@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { doc, setDoc } from 'firebase/firestore';
-import { db } from '@/firebase/config';
+
 import { ChevronLeft, ChevronRight, Send, Clock, CheckCircle, X, AlertCircle } from 'lucide-react';
 import { FormProvider, useForm } from 'react-hook-form';
 
@@ -17,7 +16,7 @@ import Collaboration from './form-sections/collaboration';
 import Media from './form-sections/media';
 import AdditionalInfo from './form-sections/additionalInfo';
 import Declaration from './form-sections/declaration';
-
+import useFirebase from '@/hooks/useFirebase';
 // Storage key for localStorage
 const STORAGE_KEY = 'hfn_form_data';
 // Expiration time in milliseconds (1 hour)
@@ -29,6 +28,7 @@ const MultiStepForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [validationError, setValidationError] = useState(false);
+  const {createMember} = useFirebase();
 
   const defaultValues = {
     // General Information
@@ -208,23 +208,26 @@ const MultiStepForm = () => {
       const organizationId = data.organizationName.toLowerCase().replace(/\s+/g, '-');
       console.log(data);
       
+      // Call Firestore function to create a document in the "members" collection
+      await createMember({ ...data, organizationId });
+  
       // Clear localStorage after successful submission
       localStorage.removeItem(STORAGE_KEY);
       
       // Reset the form to default values
       methods.reset(defaultValues);
-
+  
       // Show success modal instead of alert
       setShowSuccessModal(true);
-      setIsSubmitting(false);
-      
-      // Redirect will be handled by button in modal
     } catch (error) {
       console.error('Error submitting form: ', error);
+      setIsSubmitting(false);
       alert('There was an error submitting your form. Please try again.');
+    } finally {
       setIsSubmitting(false);
     }
   };
+  
   
   const handleCloseModal = () => {
     setShowSuccessModal(false);
@@ -351,7 +354,6 @@ const MultiStepForm = () => {
                   type="button"
                   onClick={prevStep}
                   className="flex cursor-pointer items-center px-6 py-2 text-gray-600 border border-gray-300 rounded hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-[#fb8c01] focus:ring-opacity-50"
-                  disabled={isSubmitting}
                 >
                   <ChevronLeft className="w-4 h-4 mr-2" />
                   Previous

@@ -57,7 +57,8 @@ const Technology = () => {
                   id="digitalSolutionsTypes"
                   {...field}
                   rows="3"
-                  className={`w-full px-4 py-2 border ${errors.digitalSolutionsTypes ? 'border-red-500' : 'border-gray-300'} rounded-md focus:outline-none focus:ring-2 focus:ring-[#fb8c01] focus:border-transparent`}
+                  className={`w-full px-4 py-2 border ${errors.digitalSolutionsTypes ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-[#fb8c01]'} rounded focus:outline-none focus:ring-1 focus:border-[#fb8c01] transition-colors`}
+
                 />
                 {errors.digitalSolutionsTypes && (
                   <p className="mt-1 text-sm text-red-600">{errors.digitalSolutionsTypes.message}</p>

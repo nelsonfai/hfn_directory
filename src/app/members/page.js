@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import MemberCard from '@/components/MemberCard';
 import { Loader2 } from 'lucide-react';
-
+import useFirebase from '@/hooks/useFirebase';
 export default function MembersDirectory() {
   const [members, setMembers] = useState([]);
   const [filteredMembers, setFilteredMembers] = useState([]);
@@ -14,6 +14,7 @@ export default function MembersDirectory() {
     specialization: '',
     region: '',
   });
+  const {getMembers} = useFirebase();
 
   const [regions, setRegions] = useState([]);
   const organizationTypes = [
@@ -47,8 +48,6 @@ export default function MembersDirectory() {
   useEffect(() => {
     const fetchMembers = async () => {
       try {
-        // Simulate a network request with a timeout
-        await new Promise(resolve => setTimeout(resolve, 500));
 
         // Mock data
         const mockData = [
@@ -97,11 +96,12 @@ export default function MembersDirectory() {
             phone: '+234-804-567-8901'
           }
         ];
+        const members = await getMembers()
+        console.log(members)
+        const regionsSet = new Set(members.map(member => member.region));
 
-        const regionsSet = new Set(mockData.map(member => member.region));
-
-        setMembers(mockData);
-        setFilteredMembers(mockData);
+        setMembers(members);
+        setFilteredMembers(members);
         setRegions(Array.from(regionsSet).sort());
         setLoading(false);
       } catch (error) {

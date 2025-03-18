@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Upload, X } from 'lucide-react';
-
+import useFirebase from '@/hooks/useFirebase';
 const GeneralInfo = () => {
   const { register, watch, formState: { errors }, setValue, getValues } = useFormContext();
   const [logoPreview, setLogoPreview] = useState(null);
-  
+  const [isUploading, setIsUploading] = useState(false);
+  const { uploadImage, deleteImage } = useFirebase();
+
   const organizationTypes = [
     { value: 'healthcare-provider', label: 'Healthcare Provider (Hospital, Clinic, Diagnostic Center)' },
     { value: 'pharmaceutical', label: 'Pharmaceutical Company (Manufacturer, Distributor, Importer)' },
@@ -27,32 +29,49 @@ const GeneralInfo = () => {
   const handleOrganizationTypeChange = (typeValue) => {
     const currentTypes = getValues('organizationType') || [];
     const isSelected = currentTypes.includes(typeValue);
-    
+
     let updatedTypes;
     if (isSelected) {
       updatedTypes = currentTypes.filter(type => type !== typeValue);
     } else {
       updatedTypes = [...currentTypes, typeValue];
     }
-    
+
     setValue('organizationType', updatedTypes, { shouldValidate: true });
   };
 
   // Handle logo upload
-  const handleLogoUpload = (e) => {
+  const handleLogoUpload = async (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Store the file in the form data
-      setValue('organizationLogo', file);
-      
-      // Create a preview URL
-      const previewUrl = URL.createObjectURL(file);
-      setLogoPreview(previewUrl);
+      setIsUploading(true);
+      try {
+        // Upload the file and get the URL
+        const imageUrl = await uploadImage(file);
+        // Store the URL in the form data
+        setValue('organizationLogo', imageUrl);
+        // Create a preview URL
+        const previewUrl = URL.createObjectURL(file);
+        setLogoPreview(previewUrl);
+      } catch (error) {
+        console.error('Error uploading image:', error);
+      } finally {
+        setIsUploading(false);
+      }
     }
   };
 
   // Handle logo removal
-  const handleLogoRemove = () => {
+  const handleLogoRemove = async () => {
+    const currentLogoUrl = getValues('organizationLogo');
+    if (currentLogoUrl) {
+      try {
+        // Delete the image from storage
+        await deleteImage(currentLogoUrl);
+      } catch (error) {
+        console.error('Error deleting image:', error);
+      }
+    }
     setValue('organizationLogo', null);
     setLogoPreview(null);
     // Reset the file input
@@ -71,8 +90,8 @@ const GeneralInfo = () => {
             <input
               id="organizationName"
               className={`w-full px-4 py-2 border ${errors.organizationName ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-[#fb8c01]'} rounded focus:outline-none focus:ring-1 focus:border-[#fb8c01] transition-colors`}
-              {...register('organizationName', { 
-                required: 'Organisation name is required' 
+              {...register('organizationName', {
+                required: 'Organisation name is required'
               })}
             />
             {errors.organizationName && (
@@ -80,75 +99,79 @@ const GeneralInfo = () => {
             )}
           </div>
 
-        {/* Logo Upload Section */}
-        <div className="mt-6">
-          <label className="block text-sm font-medium text-gray-700 mb-3">
-            Organisation Logo (Optional)
-          </label>
-          
-          <div className="mt-1 flex ">
-            {logoPreview ? (
-              <div className="relative group">
-                <div className="w-48 h-48 rounded-lg overflow-hidden border border-gray-200 shadow-sm bg-white flex items-center justify-center p-2">
-                  <img src={logoPreview} alt="Logo preview" className="max-w-full max-h-full object-contain" />
-                </div>
-                
-                {/* Remove button with hover effect */}
-                <button
-                  type="button"
-                  onClick={handleLogoRemove}
-                  className="absolute top-2 right-2 bg-white/80 backdrop-blur-sm rounded-full p-1.5 shadow-md hover:bg-red-50 transition-all duration-200 opacity-0 group-hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-red-400"
-                  aria-label="Remove logo"
-                >
-                  <X className="h-4 w-4 text-red-500" />
-                </button>
-                
-                {/* Change logo text that appears on hover */}
-                <div className="absolute inset-0 flex items-center justify-center bg-black/50 text-white text-sm font-medium rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                  <span>Click to change</span>
-                </div>
-                
-                <input
-                  id="logo-upload-change"
-                  type="file"
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                  accept="image/*"
-                  onChange={handleLogoUpload}
-                />
-              </div>
-            ) : (
-              <div className="flex flex-col ">
-                <label 
-                  htmlFor="logo-upload" 
-                  className="cursor-pointer flex flex-col items-center justify-center w-48 h-48 rounded-lg border-2 border-dashed border-gray-300 bg-gray-50/50 hover:bg-gray-50 hover:border-[#fb8c01] transition-all duration-200"
-                >
-                  <div className="flex flex-col items-center justify-center p-6 text-center">
-                    <div className="mb-3 rounded-full bg-gray-100 p-3">
-                      <Upload className="h-6 w-6 text-[#fb8c01]" />
-                    </div>
-                    <p className="mb-2 text-sm font-medium text-gray-700">
-                      Upload your logo
-                    </p>
-          
-                    <p className="mt-3 text-xs text-gray-400 font-medium px-2 py-1 bg-white/80 rounded-full">
-                      PNG, JPG up to 2MB
-                    </p>
+          {/* Logo Upload Section */}
+          <div className="mt-6">
+            <label className="block text-sm font-medium text-gray-700 mb-3">
+              Organisation Logo (Optional)
+            </label>
+
+            <div className="mt-1 flex items-center">
+              {logoPreview ? (
+                <div className="relative group">
+                  <div className="w-48 h-48 rounded-lg overflow-hidden border border-gray-200 shadow-sm bg-white flex items-center justify-center p-2">
+                    {isUploading ? (
+                      <div className="text-gray-500">Loading...</div>
+                    ) : (
+                      <img src={logoPreview} alt="Logo preview" className="max-w-full max-h-full object-contain" />
+                    )}
                   </div>
+
+                  {/* Remove button with hover effect */}
+                  <button
+                    type="button"
+                    onClick={handleLogoRemove}
+                    className="absolute top-0 right-[-30px] bg-white/80 backdrop-blur-sm rounded-full p-1.5 shadow-md hover:bg-red-50 transition-all duration-200 opacity-100 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-red-400 z-20 cursor-pointer"
+                    aria-label="Remove logo"
+                  >
+                    <X className="h-4 w-4 text-red-500" />
+                  </button>
+
+                  {/* Change logo text that appears on hover */}
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/50 text-white text-sm font-medium rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                    <span>Click to change</span>
+                  </div>
+
                   <input
-                    id="logo-upload"
+                    id="logo-upload-change"
                     type="file"
-                    className="sr-only"
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                     accept="image/*"
                     onChange={handleLogoUpload}
                   />
-                </label>
-              </div>
-            )}
+                </div>
+              ) : (
+                <div className="flex flex-col ">
+                  <label
+                    htmlFor="logo-upload"
+                    className="cursor-pointer flex flex-col items-center justify-center w-48 h-48 rounded-lg border-2 border-dashed border-gray-300 bg-gray-50/50 hover:bg-gray-50 hover:border-[#fb8c01] transition-all duration-200"
+                  >
+                    <div className="flex flex-col items-center justify-center p-6 text-center">
+                      <div className="mb-3 rounded-full bg-gray-100 p-3">
+                        <Upload className="h-6 w-6 text-[#fb8c01]" />
+                      </div>
+                      <p className="mb-2 text-sm font-medium text-gray-700">
+                        Upload your logo
+                      </p>
+
+                      <p className="mt-3 text-xs text-gray-400 font-medium px-2 py-1 bg-white/80 rounded-full">
+                        PNG, JPG up to 2MB
+                      </p>
+                    </div>
+                    <input
+                      id="logo-upload"
+                      type="file"
+                      className="sr-only"
+                      accept="image/*"
+                      onChange={handleLogoUpload}
+                    />
+                  </label>
+                </div>
+              )}
+            </div>
+            <p className="mt-2 text-xs text-gray-500">
+              For best results, use a square image with a transparent background
+            </p>
           </div>
-          <p className="mt-2 text-xs text-gray-500">
-            For best results, use a square image with a transparent background
-          </p>
-        </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-3">
@@ -169,10 +192,10 @@ const GeneralInfo = () => {
                       onChange={() => handleOrganizationTypeChange(type.value)}
                       checked={watchedOrganizationType && watchedOrganizationType.includes(type.value)}
                     />
-                    <div 
+                    <div
                       className={`w-5 h-5 rounded border ${
-                        watchedOrganizationType && watchedOrganizationType.includes(type.value) 
-                          ? 'border-[#5fb775]' 
+                        watchedOrganizationType && watchedOrganizationType.includes(type.value)
+                          ? 'border-[#5fb775]'
                           : errors.organizationType ? 'border-red-500' : 'border-gray-300'
                       } flex items-center justify-center cursor-pointer`}
                       onClick={() => handleOrganizationTypeChange(type.value)}
@@ -182,8 +205,8 @@ const GeneralInfo = () => {
                       )}
                     </div>
                   </div>
-                  <label 
-                    htmlFor={`organizationType-${type.value}`} 
+                  <label
+                    htmlFor={`organizationType-${type.value}`}
                     className="ml-2 block text-sm text-gray-700 cursor-pointer"
                     onClick={() => handleOrganizationTypeChange(type.value)}
                   >
@@ -195,7 +218,7 @@ const GeneralInfo = () => {
             {errors.organizationType && (
               <p className="mt-1 text-sm text-red-600">{errors.organizationType.message}</p>
             )}
-            
+
             {/* Show input field when "Others" is selected */}
             {watchedOrganizationType && watchedOrganizationType.includes('other') && (
               <div className="border-l-4 border-[#fb8c01] pl-4 py-2 mt-4 transition-all duration-300 ease-in">
@@ -206,8 +229,8 @@ const GeneralInfo = () => {
                   id="organizationTypeOther"
                   className={`w-full px-4 py-2 border ${errors.organizationTypeOther ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-[#fb8c01]'} rounded focus:outline-none focus:ring-1 focus:border-[#fb8c01] transition-colors`}
                   placeholder="Please specify"
-                  {...register('organizationTypeOther', { 
-                    required: watchedOrganizationType && watchedOrganizationType.includes('other') ? 
+                  {...register('organizationTypeOther', {
+                    required: watchedOrganizationType && watchedOrganizationType.includes('other') ?
                       'Please specify the other organisation type' : false
                   })}
                 />
@@ -227,7 +250,7 @@ const GeneralInfo = () => {
               placeholder="2025"
               id="yearEstablished"
               className={`w-full px-4 py-2 border ${errors.yearEstablished ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-[#fb8c01]'} rounded focus:outline-none focus:ring-1 focus:border-[#fb8c01] transition-colors`}
-              {...register('yearEstablished', { 
+              {...register('yearEstablished', {
                 min: { value: 1800, message: 'Year must be 1800 or later' },
                 max: { value: currentYear, message: `Year cannot be later than ${currentYear}` },
                 validate: {
@@ -300,7 +323,7 @@ const GeneralInfo = () => {
               <option value="Yobe">Yobe</option>
               <option value="Zamfara">Zamfara</option>
             </select>
-        </div>
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -323,7 +346,7 @@ const GeneralInfo = () => {
                 <p className="mt-1 text-sm text-red-600">{errors.website.message}</p>
               )}
             </div>
-            
+
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
                 Email Address <span className="text-red-500">*</span>

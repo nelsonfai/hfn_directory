@@ -1,5 +1,8 @@
 import { getApps, initializeApp } from "firebase/app";
-import { getFirestore, collection, getDocs, query, where, doc, getDoc, limit, orderBy,updateDoc } from 'firebase/firestore';
+import { 
+    getFirestore, collection, getDocs, query, where, doc, getDoc, limit, orderBy, updateDoc 
+} from 'firebase/firestore';
+import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
     apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -14,5 +17,6 @@ const firebaseConfig = {
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApps()[0];
 
 const db = getFirestore(app);
+const storage = getStorage(app);
 
-export { db, collection, getDocs, getDoc, query, where, doc, limit, orderBy,updateDoc};
+export { db, storage, collection, getDocs, getDoc, query, where, doc, limit, orderBy, updateDoc };

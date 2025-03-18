@@ -1,88 +1,38 @@
 'use client'
+
 import { useState } from 'react';
 import Link from 'next/link';
 import { ChevronDown, ChevronUp, Mail, Phone, Globe, ChevronLeft } from 'lucide-react';
-import { Linkedin, Twitter, Facebook, Instagram } from 'lucide-react'; 
+import { Linkedin, Twitter, Facebook, Instagram } from 'lucide-react';
+import useFirebase from '@/hooks/useFirebase';
 
-export default function MemberDetailPage() {
-  const memberData = {
-    // General Information
-    organizationLogo: '',
-    organizationName: 'Sunshine Healthcare Alliance',
-    organizationType: ['healthcare-provider', 'ngo'],
-    organizationTypeOther: '',
-    yearEstablished: '2010',
-    address: '25 Medical Center Road, Ikeja',
-    region: 'Lagos',
-    website: 'https://www.sunshinehealthcare.org',
-    email: 'info@sunshinehealthcare.org',
-    phone: '+234-801-234-5678',
+export default function MemberDetailPage({ params }) {
+  const { id } = params;
+  const { getMemberById } = useFirebase();
+  
+  // Convert to client component with useState for data
+  const [memberData, setMemberData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  
+  // Fetch member data on mount
+  useState(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getMemberById('PpFhshXl0uAtN4WD6cZp');
+        setMemberData(data);
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
     
-    // CEO/Head of Organization Details
-    ceoName: 'Dr. Adebayo Johnson',
-    ceoDesignation: 'Executive Director',
-    ceoEmail: 'adebayo@sunshinehealthcare.org',
-    ceoPhone: '+234-801-234-5679',
-    isCeoPrimaryContact: true, // Flag to determine if CEO is primary contact
-    
-    // Contact Person Details
-    primaryContactName: 'Dr. Adebayo Johnson', // Same as CEO since isCeoPrimaryContact is true
-    primaryDesignation: 'Executive Director',
-    primaryEmail: 'adebayo@sunshinehealthcare.org',
-    primaryPhone: '+234-801-234-5679',
-    secondaryContactName: 'Ms. Funmi Adeyemi',
-    secondaryDesignation: 'Operations Manager',
-    secondaryEmail: 'funmi@sunshinehealthcare.org',
-    secondaryPhone: '+234-801-234-5680',
-    
-    // Services & Specialization
-    description: 'Sunshine Healthcare Alliance is a leading provider of primary healthcare services with a focus on maternal and child health across Nigeria. Our mission is to improve healthcare access in underserved communities through innovative and sustainable approaches.',
-    specialization: ['primary-healthcare', 'public-health', 'capacity-building', 'medical-equipment'],
-    specializationOther: 'Community health education',
-    requiresCustomsAssistance: true, // New field for medical equipment providers
-    
-    // Affiliations & Memberships
-    memberOfAssociations: true,
-    associations: 'Nigerian Medical Association, African Healthcare Federation',
-    membershipNumber: 'NMA-12345, AHF-5678',
-    collaboratesWithGovOrg: true,
-    governmentCollaborations: 'Federal Ministry of Health, Lagos State Primary Healthcare Board',
-    
-    // Technology & Innovation
-    usesDigitalSolutions: true,
-    digitalSolutionsTypes: 'Electronic Medical Records, Telemedicine, Mobile Health Applications',
-    interestedInDigitalCollaboration: true,
-    
-    // Regulatory Compliance & Certifications
-    isLicensed: true,
-    regulatoryAuthority: 'Nigerian Medical and Dental Council',
-    registrationNumber: 'NMDC-2010-12345',
-    hasInternationalCertifications: true,
-    certifications: 'ISO 9001:2015, WHO Quality Standards',
-    
-    // Collaboration & Networking
-    interestedInCollaboration: true,
-    collaborationAreas: ['research', 'capacity-building', 'public-health'],
-    collaborationAreasOther: 'Community outreach programs',
-    
-    // Media & Publicity
-    allowFeatureInPublications: true,
-    linkedIn: 'https://www.linkedin.com/company/sunshine-healthcare-alliance',
-    twitter: 'https://twitter.com/sunshinehealth_ng',
-    facebook: 'https://www.facebook.com/sunshinehealthcareng',
-    instagram: 'https://www.instagram.com/sunshine_healthcare_ng',
-    
-    // Additional Information
-    additionalInfo: 'We are expanding our services to rural areas and seeking partnerships for mobile clinic solutions.',
-    
-    // Declaration & Consent
-    fullName: 'Dr. Adebayo Johnson',
-    consentGiven: true,
-    date: '2023-06-15',
-  };
+    fetchData();
+  }, [id, getMemberById]);
 
-  // Generate organization initials if no logo is available
   const getInitials = (name) => {
+    if (!name) return '';
     return name
       .split(' ')
       .map(word => word[0])
@@ -90,8 +40,6 @@ export default function MemberDetailPage() {
       .substring(0, 2)
       .toUpperCase();
   };
-
-  const organizationInitials = getInitials(memberData.organizationName);
 
   const [expandedSections, setExpandedSections] = useState({
     general: true,
@@ -129,8 +77,7 @@ export default function MemberDetailPage() {
       'other': 'Others'
     };
     
-
-    return types.map(type => typeLabels[type] || type).join(', ');
+    return types?.map(type => typeLabels[type] || type).join(', ') || '';
   };
 
   const specLabels = {
@@ -148,7 +95,17 @@ export default function MemberDetailPage() {
     'research': 'Research & Development',
     'policy-regulation': 'Policy & Regulation',
     'other': 'Others'
-};
+  };
+  
+  if (loading) return <div className="flex justify-center p-10">Loading member data...</div>;
+  if (error) return <div className="text-red-500 p-10">Error: {error}</div>;
+  if (!memberData) return <div className="p-10">No member data found</div>;
+
+  const organizationInitials = getInitials(memberData.organizationName);
+
+
+
+
 
 
   return (
@@ -511,15 +468,15 @@ export default function MemberDetailPage() {
 
                       {/* Show primary contact - either CEO or specific primary contact */}
                       <div className="bg-gray-50 rounded-lg p-4 mb-3">
-                        <h4 className="font-medium text-gray-800 text-sm">{memberData.primaryContactName}</h4>
+                        <h4 className="font-medium text-gray-800 text-sm">{memberData.primaryContactName ||  memberData.ceoName}</h4>
                         <p className="text-xs text-gray-600 mb-2">{memberData.primaryDesignation}</p>
                         <div className="flex items-center text-xs mb-1">
                           <Mail className="h-3 w-3 text-gray-500 mr-1" />
-                          <a href={`mailto:${memberData.primaryEmail}`} className="text-gray-600 hover:text-[#5fb775]">{memberData.primaryEmail}</a>
+                          <a href={`mailto:${memberData.primaryEmail}`} className="text-gray-600 hover:text-[#5fb775]">{memberData.primaryEmail || memberData.ceoEmail}</a>
                         </div>
                         <div className="flex items-center text-xs">
                           <Phone className="h-3 w-3 text-gray-500 mr-1" />
-                          <a href={`tel:${memberData.primaryPhone}`} className="text-gray-600 hover:text-[#5fb775]">{memberData.primaryPhone}</a>
+                          <a href={`tel:${memberData.primaryPhone}`} className="text-gray-600 hover:text-[#5fb775]">{memberData.primaryPhone || memberData.ceoPhone}</a>
                         </div>
                         {memberData.isCeoPrimaryContact && (
                           <div className="mt-2 pt-2 border-t border-gray-200">
